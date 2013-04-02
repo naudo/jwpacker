@@ -1,6 +1,6 @@
 require "nokogiri"
 require "active_support"
-
+require "base64"
 file = File.open(ARGV[0])
 
 parsed = Nokogiri.XML(file)
@@ -17,7 +17,7 @@ parsed.xpath("//components/component/@name").each do |component|
 
       if element.value.slice(0,data_uri_base_string.length) != data_uri_base_string
         image_file = File.read(file_path)
-        data = ActiveSupport::Base64.encode64(image_file).gsub("\n", '')
+        data = Base64.encode64(image_file).gsub("\n", '')
         data_uri_string = "#{data_uri_base_string}#{data}"
         puts "Packing #{file_path}"
         element.value = data_uri_string
@@ -25,6 +25,8 @@ parsed.xpath("//components/component/@name").each do |component|
         #puts "Image already packed"
       end
     rescue
+
+      element.value = element.value
       puts "No File for #{file_path}"
     end
   end
