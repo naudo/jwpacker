@@ -1,5 +1,4 @@
 require "nokogiri"
-require "active_support"
 require "base64"
 file = File.open(ARGV[0])
 
